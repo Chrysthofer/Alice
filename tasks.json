@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Clean",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": ["/c", "del /Q lex.yy.c parser.tab.c parser.tab.h parser.output mycompiler.exe test.asm"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Flex",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": ["/c", "flex lexer.l"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Bison",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": ["/c", "bison -d -v parser.y"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Compile",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": ["/c", "gcc lex.yy.c parser.tab.c ast.c -o mycompiler"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Run",
+            "type": "process",
+            "command": "cmd.exe",
+            "args": ["/c", ".\\mycompiler test.c"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build and Run",
+            "type": "process",
+            "dependsOrder": "sequence",
+            "dependsOn": ["Clean", "Flex", "Bison", "Compile", "Run"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
