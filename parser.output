@@ -1,17 +1,11 @@
-Terminals unused in grammar
-
-   LBRACE
-   RBRACE
-
-
-State 33 conflicts: 8 shift/reduce
-State 34 conflicts: 8 shift/reduce
-State 35 conflicts: 8 shift/reduce
-State 36 conflicts: 8 shift/reduce
-State 37 conflicts: 8 shift/reduce
-State 38 conflicts: 8 shift/reduce
-State 39 conflicts: 8 shift/reduce
-State 40 conflicts: 8 shift/reduce
+State 46 conflicts: 8 shift/reduce
+State 47 conflicts: 8 shift/reduce
+State 48 conflicts: 8 shift/reduce
+State 49 conflicts: 8 shift/reduce
+State 50 conflicts: 8 shift/reduce
+State 51 conflicts: 8 shift/reduce
+State 52 conflicts: 8 shift/reduce
+State 53 conflicts: 8 shift/reduce
 
 
 Grammar
@@ -28,62 +22,82 @@ Grammar
     6     | stmt
 
     7 stmt: IDENTIFIER ASSIGN expr SEMICOLON
-    8     | RETURN expr SEMICOLON
-    9     | error SEMICOLON
+    8     | IDENTIFIER ASSIGN expr
+    9     | RETURN expr SEMICOLON
+   10     | WHILE LPAREN expr RPAREN LBRACE stmt_list RBRACE
+   11     | FOR LPAREN stmt expr SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE
+   12     | IF LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr RPAREN LBRACE stmt_list RBRACE
+   14     | IDENTIFIER PLUSPLUS SEMICOLON
+   15     | IDENTIFIER PLUSPLUS
+   16     | IDENTIFIER MINUSMINUS SEMICOLON
+   17     | IDENTIFIER MINUSMINUS
+   18     | error SEMICOLON
 
-   10 expr: expr PLUS expr
-   11     | expr MINUS expr
-   12     | expr TIMES expr
-   13     | expr DIVIDE expr
-   14     | expr LT expr
-   15     | expr GT expr
-   16     | expr LE expr
-   17     | expr GE expr
-   18     | IDENTIFIER
-   19     | NUMBER
-   20     | LPAREN expr RPAREN
-   21     | error
+   19 stmt_list: stmt
+   20          | stmt_list stmt
+
+   21 expr: expr PLUS expr
+   22     | expr MINUS expr
+   23     | expr TIMES expr
+   24     | expr DIVIDE expr
+   25     | expr LT expr
+   26     | expr GT expr
+   27     | expr LE expr
+   28     | expr GE expr
+   29     | IDENTIFIER
+   30     | NUMBER
+   31     | LPAREN expr RPAREN
+   32     | error
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-error (256) 9 21
+error (256) 18 32
 INT (258) 4 5
-RETURN (259) 8
-PLUS (260) 10
-MINUS (261) 11
-TIMES (262) 12
-DIVIDE (263) 13
-ASSIGN (264) 5 7
-SEMICOLON (265) 4 5 7 8 9
-LPAREN (266) 20
-RPAREN (267) 20
-LBRACE (268)
-RBRACE (269)
-LT (270) 14
-GT (271) 15
-LE (272) 16
-GE (273) 17
-IDENTIFIER (274) 4 5 7 18
-NUMBER (275) 19
+RETURN (259) 9
+IF (260) 12 13
+ELSE (261) 12
+WHILE (262) 10
+FOR (263) 11
+PLUS (264) 21
+MINUS (265) 22
+TIMES (266) 23
+DIVIDE (267) 24
+ASSIGN (268) 5 7 8
+SEMICOLON (269) 4 5 7 9 11 14 16 18
+PLUSPLUS (270) 14 15
+MINUSMINUS (271) 16 17
+LPAREN (272) 10 11 12 13 31
+RPAREN (273) 10 11 12 13 31
+LBRACE (274) 10 11 12 13
+RBRACE (275) 10 11 12 13
+LT (276) 25
+GT (277) 26
+LE (278) 27
+GE (279) 28
+IDENTIFIER (280) 4 5 7 8 14 15 16 17 29
+NUMBER (281) 30
 
 
 Nonterminals, with rules where they appear
 
-$accept (21)
+$accept (27)
     on left: 0
-program (22)
+program (28)
     on left: 1, on right: 0
-decls (23)
+decls (29)
     on left: 2 3, on right: 1 2
-decl (24)
+decl (30)
     on left: 4 5 6, on right: 2
-stmt (25)
-    on left: 7 8 9, on right: 6
-expr (26)
-    on left: 10 11 12 13 14 15 16 17 18 19 20 21, on right: 5 7 8 10
-    11 12 13 14 15 16 17 20
+stmt (31)
+    on left: 7 8 9 10 11 12 13 14 15 16 17 18, on right: 6 11 19 20
+stmt_list (32)
+    on left: 19 20, on right: 10 11 12 13 20
+expr (33)
+    on left: 21 22 23 24 25 26 27 28 29 30 31 32, on right: 5 7 8 9
+    10 11 12 13 21 22 23 24 25 26 27 28 31
 
 
 state 0
@@ -111,12 +125,15 @@ state 2
     error       shift, and go to state 4
     INT         shift, and go to state 5
     RETURN      shift, and go to state 6
-    IDENTIFIER  shift, and go to state 7
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
 
     $end  reduce using rule 1 (program)
 
-    decl  go to state 8
-    stmt  go to state 9
+    decl  go to state 11
+    stmt  go to state 12
 
 
 state 3
@@ -128,9 +145,9 @@ state 3
 
 state 4
 
-    9 stmt: error . SEMICOLON
+   18 stmt: error . SEMICOLON
 
-    SEMICOLON  shift, and go to state 10
+    SEMICOLON  shift, and go to state 13
 
 
 state 5
@@ -138,589 +155,998 @@ state 5
     4 decl: INT . IDENTIFIER SEMICOLON
     5     | INT . IDENTIFIER ASSIGN expr SEMICOLON
 
-    IDENTIFIER  shift, and go to state 11
+    IDENTIFIER  shift, and go to state 14
 
 
 state 6
 
-    8 stmt: RETURN . expr SEMICOLON
+    9 stmt: RETURN . expr SEMICOLON
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    expr  go to state 16
+    expr  go to state 19
 
 
 state 7
 
-    7 stmt: IDENTIFIER . ASSIGN expr SEMICOLON
+   12 stmt: IF . LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF . LPAREN expr RPAREN LBRACE stmt_list RBRACE
 
-    ASSIGN  shift, and go to state 17
+    LPAREN  shift, and go to state 20
 
 
 state 8
+
+   10 stmt: WHILE . LPAREN expr RPAREN LBRACE stmt_list RBRACE
+
+    LPAREN  shift, and go to state 21
+
+
+state 9
+
+   11 stmt: FOR . LPAREN stmt expr SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE
+
+    LPAREN  shift, and go to state 22
+
+
+state 10
+
+    7 stmt: IDENTIFIER . ASSIGN expr SEMICOLON
+    8     | IDENTIFIER . ASSIGN expr
+   14     | IDENTIFIER . PLUSPLUS SEMICOLON
+   15     | IDENTIFIER . PLUSPLUS
+   16     | IDENTIFIER . MINUSMINUS SEMICOLON
+   17     | IDENTIFIER . MINUSMINUS
+
+    ASSIGN      shift, and go to state 23
+    PLUSPLUS    shift, and go to state 24
+    MINUSMINUS  shift, and go to state 25
+
+
+state 11
 
     2 decls: decls decl .
 
     $default  reduce using rule 2 (decls)
 
 
-state 9
+state 12
 
     6 decl: stmt .
 
     $default  reduce using rule 6 (decl)
 
 
-state 10
-
-    9 stmt: error SEMICOLON .
-
-    $default  reduce using rule 9 (stmt)
-
-
-state 11
-
-    4 decl: INT IDENTIFIER . SEMICOLON
-    5     | INT IDENTIFIER . ASSIGN expr SEMICOLON
-
-    ASSIGN     shift, and go to state 18
-    SEMICOLON  shift, and go to state 19
-
-
-state 12
-
-   21 expr: error .
-
-    $default  reduce using rule 21 (expr)
-
-
 state 13
 
-   20 expr: LPAREN . expr RPAREN
+   18 stmt: error SEMICOLON .
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 20
+    $default  reduce using rule 18 (stmt)
 
 
 state 14
 
-   18 expr: IDENTIFIER .
+    4 decl: INT IDENTIFIER . SEMICOLON
+    5     | INT IDENTIFIER . ASSIGN expr SEMICOLON
 
-    $default  reduce using rule 18 (expr)
+    ASSIGN     shift, and go to state 26
+    SEMICOLON  shift, and go to state 27
 
 
 state 15
 
-   19 expr: NUMBER .
+   32 expr: error .
 
-    $default  reduce using rule 19 (expr)
+    $default  reduce using rule 32 (expr)
 
 
 state 16
 
-    8 stmt: RETURN expr . SEMICOLON
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   31 expr: LPAREN . expr RPAREN
 
-    PLUS       shift, and go to state 21
-    MINUS      shift, and go to state 22
-    TIMES      shift, and go to state 23
-    DIVIDE     shift, and go to state 24
-    SEMICOLON  shift, and go to state 25
-    LT         shift, and go to state 26
-    GT         shift, and go to state 27
-    LE         shift, and go to state 28
-    GE         shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 28
 
 
 state 17
 
-    7 stmt: IDENTIFIER ASSIGN . expr SEMICOLON
+   29 expr: IDENTIFIER .
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 30
+    $default  reduce using rule 29 (expr)
 
 
 state 18
 
-    5 decl: INT IDENTIFIER ASSIGN . expr SEMICOLON
+   30 expr: NUMBER .
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 31
+    $default  reduce using rule 30 (expr)
 
 
 state 19
+
+    9 stmt: RETURN expr . SEMICOLON
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS       shift, and go to state 29
+    MINUS      shift, and go to state 30
+    TIMES      shift, and go to state 31
+    DIVIDE     shift, and go to state 32
+    SEMICOLON  shift, and go to state 33
+    LT         shift, and go to state 34
+    GT         shift, and go to state 35
+    LE         shift, and go to state 36
+    GE         shift, and go to state 37
+
+
+state 20
+
+   12 stmt: IF LPAREN . expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN . expr RPAREN LBRACE stmt_list RBRACE
+
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 38
+
+
+state 21
+
+   10 stmt: WHILE LPAREN . expr RPAREN LBRACE stmt_list RBRACE
+
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 39
+
+
+state 22
+
+   11 stmt: FOR LPAREN . stmt expr SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 40
+
+
+state 23
+
+    7 stmt: IDENTIFIER ASSIGN . expr SEMICOLON
+    8     | IDENTIFIER ASSIGN . expr
+
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 41
+
+
+state 24
+
+   14 stmt: IDENTIFIER PLUSPLUS . SEMICOLON
+   15     | IDENTIFIER PLUSPLUS .
+
+    SEMICOLON  shift, and go to state 42
+
+    $default  reduce using rule 15 (stmt)
+
+
+state 25
+
+   16 stmt: IDENTIFIER MINUSMINUS . SEMICOLON
+   17     | IDENTIFIER MINUSMINUS .
+
+    SEMICOLON  shift, and go to state 43
+
+    $default  reduce using rule 17 (stmt)
+
+
+state 26
+
+    5 decl: INT IDENTIFIER ASSIGN . expr SEMICOLON
+
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 44
+
+
+state 27
 
     4 decl: INT IDENTIFIER SEMICOLON .
 
     $default  reduce using rule 4 (decl)
 
 
-state 20
-
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
-   20     | LPAREN expr . RPAREN
-
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    RPAREN  shift, and go to state 32
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
-
-
-state 21
-
-   10 expr: expr PLUS . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 33
-
-
-state 22
-
-   11 expr: expr MINUS . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 34
-
-
-state 23
-
-   12 expr: expr TIMES . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 35
-
-
-state 24
-
-   13 expr: expr DIVIDE . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 36
-
-
-state 25
-
-    8 stmt: RETURN expr SEMICOLON .
-
-    $default  reduce using rule 8 (stmt)
-
-
-state 26
-
-   14 expr: expr LT . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 37
-
-
-state 27
-
-   15 expr: expr GT . expr
-
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 38
-
-
 state 28
 
-   16 expr: expr LE . expr
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+   31     | LPAREN expr . RPAREN
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
-
-    expr  go to state 39
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    RPAREN  shift, and go to state 45
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
 
 
 state 29
 
-   17 expr: expr GE . expr
+   21 expr: expr PLUS . expr
 
-    error       shift, and go to state 12
-    LPAREN      shift, and go to state 13
-    IDENTIFIER  shift, and go to state 14
-    NUMBER      shift, and go to state 15
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    expr  go to state 40
+    expr  go to state 46
 
 
 state 30
 
-    7 stmt: IDENTIFIER ASSIGN expr . SEMICOLON
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   22 expr: expr MINUS . expr
 
-    PLUS       shift, and go to state 21
-    MINUS      shift, and go to state 22
-    TIMES      shift, and go to state 23
-    DIVIDE     shift, and go to state 24
-    SEMICOLON  shift, and go to state 41
-    LT         shift, and go to state 26
-    GT         shift, and go to state 27
-    LE         shift, and go to state 28
-    GE         shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 47
 
 
 state 31
 
-    5 decl: INT IDENTIFIER ASSIGN expr . SEMICOLON
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   23 expr: expr TIMES . expr
 
-    PLUS       shift, and go to state 21
-    MINUS      shift, and go to state 22
-    TIMES      shift, and go to state 23
-    DIVIDE     shift, and go to state 24
-    SEMICOLON  shift, and go to state 42
-    LT         shift, and go to state 26
-    GT         shift, and go to state 27
-    LE         shift, and go to state 28
-    GE         shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 48
 
 
 state 32
 
-   20 expr: LPAREN expr RPAREN .
+   24 expr: expr DIVIDE . expr
 
-    $default  reduce using rule 20 (expr)
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
+
+    expr  go to state 49
 
 
 state 33
 
-   10 expr: expr . PLUS expr
-   10     | expr PLUS expr .
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+    9 stmt: RETURN expr SEMICOLON .
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
-
-    PLUS      [reduce using rule 10 (expr)]
-    MINUS     [reduce using rule 10 (expr)]
-    TIMES     [reduce using rule 10 (expr)]
-    DIVIDE    [reduce using rule 10 (expr)]
-    LT        [reduce using rule 10 (expr)]
-    GT        [reduce using rule 10 (expr)]
-    LE        [reduce using rule 10 (expr)]
-    GE        [reduce using rule 10 (expr)]
-    $default  reduce using rule 10 (expr)
+    $default  reduce using rule 9 (stmt)
 
 
 state 34
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   11     | expr MINUS expr .
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   25 expr: expr LT . expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    PLUS      [reduce using rule 11 (expr)]
-    MINUS     [reduce using rule 11 (expr)]
-    TIMES     [reduce using rule 11 (expr)]
-    DIVIDE    [reduce using rule 11 (expr)]
-    LT        [reduce using rule 11 (expr)]
-    GT        [reduce using rule 11 (expr)]
-    LE        [reduce using rule 11 (expr)]
-    GE        [reduce using rule 11 (expr)]
-    $default  reduce using rule 11 (expr)
+    expr  go to state 50
 
 
 state 35
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   12     | expr TIMES expr .
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   26 expr: expr GT . expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    PLUS      [reduce using rule 12 (expr)]
-    MINUS     [reduce using rule 12 (expr)]
-    TIMES     [reduce using rule 12 (expr)]
-    DIVIDE    [reduce using rule 12 (expr)]
-    LT        [reduce using rule 12 (expr)]
-    GT        [reduce using rule 12 (expr)]
-    LE        [reduce using rule 12 (expr)]
-    GE        [reduce using rule 12 (expr)]
-    $default  reduce using rule 12 (expr)
+    expr  go to state 51
 
 
 state 36
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   13     | expr DIVIDE expr .
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   27 expr: expr LE . expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    PLUS      [reduce using rule 13 (expr)]
-    MINUS     [reduce using rule 13 (expr)]
-    TIMES     [reduce using rule 13 (expr)]
-    DIVIDE    [reduce using rule 13 (expr)]
-    LT        [reduce using rule 13 (expr)]
-    GT        [reduce using rule 13 (expr)]
-    LE        [reduce using rule 13 (expr)]
-    GE        [reduce using rule 13 (expr)]
-    $default  reduce using rule 13 (expr)
+    expr  go to state 52
 
 
 state 37
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   14     | expr LT expr .
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
+   28 expr: expr GE . expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    PLUS      [reduce using rule 14 (expr)]
-    MINUS     [reduce using rule 14 (expr)]
-    TIMES     [reduce using rule 14 (expr)]
-    DIVIDE    [reduce using rule 14 (expr)]
-    LT        [reduce using rule 14 (expr)]
-    GT        [reduce using rule 14 (expr)]
-    LE        [reduce using rule 14 (expr)]
-    GE        [reduce using rule 14 (expr)]
-    $default  reduce using rule 14 (expr)
+    expr  go to state 53
 
 
 state 38
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   15     | expr GT expr .
-   16     | expr . LE expr
-   17     | expr . GE expr
+   12 stmt: IF LPAREN expr . RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr . RPAREN LBRACE stmt_list RBRACE
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
-
-    PLUS      [reduce using rule 15 (expr)]
-    MINUS     [reduce using rule 15 (expr)]
-    TIMES     [reduce using rule 15 (expr)]
-    DIVIDE    [reduce using rule 15 (expr)]
-    LT        [reduce using rule 15 (expr)]
-    GT        [reduce using rule 15 (expr)]
-    LE        [reduce using rule 15 (expr)]
-    GE        [reduce using rule 15 (expr)]
-    $default  reduce using rule 15 (expr)
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    RPAREN  shift, and go to state 54
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
 
 
 state 39
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   16     | expr LE expr .
-   17     | expr . GE expr
+   10 stmt: WHILE LPAREN expr . RPAREN LBRACE stmt_list RBRACE
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
-
-    PLUS      [reduce using rule 16 (expr)]
-    MINUS     [reduce using rule 16 (expr)]
-    TIMES     [reduce using rule 16 (expr)]
-    DIVIDE    [reduce using rule 16 (expr)]
-    LT        [reduce using rule 16 (expr)]
-    GT        [reduce using rule 16 (expr)]
-    LE        [reduce using rule 16 (expr)]
-    GE        [reduce using rule 16 (expr)]
-    $default  reduce using rule 16 (expr)
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    RPAREN  shift, and go to state 55
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
 
 
 state 40
 
-   10 expr: expr . PLUS expr
-   11     | expr . MINUS expr
-   12     | expr . TIMES expr
-   13     | expr . DIVIDE expr
-   14     | expr . LT expr
-   15     | expr . GT expr
-   16     | expr . LE expr
-   17     | expr . GE expr
-   17     | expr GE expr .
+   11 stmt: FOR LPAREN stmt . expr SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE
 
-    PLUS    shift, and go to state 21
-    MINUS   shift, and go to state 22
-    TIMES   shift, and go to state 23
-    DIVIDE  shift, and go to state 24
-    LT      shift, and go to state 26
-    GT      shift, and go to state 27
-    LE      shift, and go to state 28
-    GE      shift, and go to state 29
+    error       shift, and go to state 15
+    LPAREN      shift, and go to state 16
+    IDENTIFIER  shift, and go to state 17
+    NUMBER      shift, and go to state 18
 
-    PLUS      [reduce using rule 17 (expr)]
-    MINUS     [reduce using rule 17 (expr)]
-    TIMES     [reduce using rule 17 (expr)]
-    DIVIDE    [reduce using rule 17 (expr)]
-    LT        [reduce using rule 17 (expr)]
-    GT        [reduce using rule 17 (expr)]
-    LE        [reduce using rule 17 (expr)]
-    GE        [reduce using rule 17 (expr)]
-    $default  reduce using rule 17 (expr)
+    expr  go to state 56
 
 
 state 41
+
+    7 stmt: IDENTIFIER ASSIGN expr . SEMICOLON
+    8     | IDENTIFIER ASSIGN expr .
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS       shift, and go to state 29
+    MINUS      shift, and go to state 30
+    TIMES      shift, and go to state 31
+    DIVIDE     shift, and go to state 32
+    SEMICOLON  shift, and go to state 57
+    LT         shift, and go to state 34
+    GT         shift, and go to state 35
+    LE         shift, and go to state 36
+    GE         shift, and go to state 37
+
+    $default  reduce using rule 8 (stmt)
+
+
+state 42
+
+   14 stmt: IDENTIFIER PLUSPLUS SEMICOLON .
+
+    $default  reduce using rule 14 (stmt)
+
+
+state 43
+
+   16 stmt: IDENTIFIER MINUSMINUS SEMICOLON .
+
+    $default  reduce using rule 16 (stmt)
+
+
+state 44
+
+    5 decl: INT IDENTIFIER ASSIGN expr . SEMICOLON
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS       shift, and go to state 29
+    MINUS      shift, and go to state 30
+    TIMES      shift, and go to state 31
+    DIVIDE     shift, and go to state 32
+    SEMICOLON  shift, and go to state 58
+    LT         shift, and go to state 34
+    GT         shift, and go to state 35
+    LE         shift, and go to state 36
+    GE         shift, and go to state 37
+
+
+state 45
+
+   31 expr: LPAREN expr RPAREN .
+
+    $default  reduce using rule 31 (expr)
+
+
+state 46
+
+   21 expr: expr . PLUS expr
+   21     | expr PLUS expr .
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 21 (expr)]
+    MINUS     [reduce using rule 21 (expr)]
+    TIMES     [reduce using rule 21 (expr)]
+    DIVIDE    [reduce using rule 21 (expr)]
+    LT        [reduce using rule 21 (expr)]
+    GT        [reduce using rule 21 (expr)]
+    LE        [reduce using rule 21 (expr)]
+    GE        [reduce using rule 21 (expr)]
+    $default  reduce using rule 21 (expr)
+
+
+state 47
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   22     | expr MINUS expr .
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 22 (expr)]
+    MINUS     [reduce using rule 22 (expr)]
+    TIMES     [reduce using rule 22 (expr)]
+    DIVIDE    [reduce using rule 22 (expr)]
+    LT        [reduce using rule 22 (expr)]
+    GT        [reduce using rule 22 (expr)]
+    LE        [reduce using rule 22 (expr)]
+    GE        [reduce using rule 22 (expr)]
+    $default  reduce using rule 22 (expr)
+
+
+state 48
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   23     | expr TIMES expr .
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 23 (expr)]
+    MINUS     [reduce using rule 23 (expr)]
+    TIMES     [reduce using rule 23 (expr)]
+    DIVIDE    [reduce using rule 23 (expr)]
+    LT        [reduce using rule 23 (expr)]
+    GT        [reduce using rule 23 (expr)]
+    LE        [reduce using rule 23 (expr)]
+    GE        [reduce using rule 23 (expr)]
+    $default  reduce using rule 23 (expr)
+
+
+state 49
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   24     | expr DIVIDE expr .
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 24 (expr)]
+    MINUS     [reduce using rule 24 (expr)]
+    TIMES     [reduce using rule 24 (expr)]
+    DIVIDE    [reduce using rule 24 (expr)]
+    LT        [reduce using rule 24 (expr)]
+    GT        [reduce using rule 24 (expr)]
+    LE        [reduce using rule 24 (expr)]
+    GE        [reduce using rule 24 (expr)]
+    $default  reduce using rule 24 (expr)
+
+
+state 50
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   25     | expr LT expr .
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 25 (expr)]
+    MINUS     [reduce using rule 25 (expr)]
+    TIMES     [reduce using rule 25 (expr)]
+    DIVIDE    [reduce using rule 25 (expr)]
+    LT        [reduce using rule 25 (expr)]
+    GT        [reduce using rule 25 (expr)]
+    LE        [reduce using rule 25 (expr)]
+    GE        [reduce using rule 25 (expr)]
+    $default  reduce using rule 25 (expr)
+
+
+state 51
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   26     | expr GT expr .
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 26 (expr)]
+    MINUS     [reduce using rule 26 (expr)]
+    TIMES     [reduce using rule 26 (expr)]
+    DIVIDE    [reduce using rule 26 (expr)]
+    LT        [reduce using rule 26 (expr)]
+    GT        [reduce using rule 26 (expr)]
+    LE        [reduce using rule 26 (expr)]
+    GE        [reduce using rule 26 (expr)]
+    $default  reduce using rule 26 (expr)
+
+
+state 52
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   27     | expr LE expr .
+   28     | expr . GE expr
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 27 (expr)]
+    MINUS     [reduce using rule 27 (expr)]
+    TIMES     [reduce using rule 27 (expr)]
+    DIVIDE    [reduce using rule 27 (expr)]
+    LT        [reduce using rule 27 (expr)]
+    GT        [reduce using rule 27 (expr)]
+    LE        [reduce using rule 27 (expr)]
+    GE        [reduce using rule 27 (expr)]
+    $default  reduce using rule 27 (expr)
+
+
+state 53
+
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+   28     | expr GE expr .
+
+    PLUS    shift, and go to state 29
+    MINUS   shift, and go to state 30
+    TIMES   shift, and go to state 31
+    DIVIDE  shift, and go to state 32
+    LT      shift, and go to state 34
+    GT      shift, and go to state 35
+    LE      shift, and go to state 36
+    GE      shift, and go to state 37
+
+    PLUS      [reduce using rule 28 (expr)]
+    MINUS     [reduce using rule 28 (expr)]
+    TIMES     [reduce using rule 28 (expr)]
+    DIVIDE    [reduce using rule 28 (expr)]
+    LT        [reduce using rule 28 (expr)]
+    GT        [reduce using rule 28 (expr)]
+    LE        [reduce using rule 28 (expr)]
+    GE        [reduce using rule 28 (expr)]
+    $default  reduce using rule 28 (expr)
+
+
+state 54
+
+   12 stmt: IF LPAREN expr RPAREN . LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr RPAREN . LBRACE stmt_list RBRACE
+
+    LBRACE  shift, and go to state 59
+
+
+state 55
+
+   10 stmt: WHILE LPAREN expr RPAREN . LBRACE stmt_list RBRACE
+
+    LBRACE  shift, and go to state 60
+
+
+state 56
+
+   11 stmt: FOR LPAREN stmt expr . SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE
+   21 expr: expr . PLUS expr
+   22     | expr . MINUS expr
+   23     | expr . TIMES expr
+   24     | expr . DIVIDE expr
+   25     | expr . LT expr
+   26     | expr . GT expr
+   27     | expr . LE expr
+   28     | expr . GE expr
+
+    PLUS       shift, and go to state 29
+    MINUS      shift, and go to state 30
+    TIMES      shift, and go to state 31
+    DIVIDE     shift, and go to state 32
+    SEMICOLON  shift, and go to state 61
+    LT         shift, and go to state 34
+    GT         shift, and go to state 35
+    LE         shift, and go to state 36
+    GE         shift, and go to state 37
+
+
+state 57
 
     7 stmt: IDENTIFIER ASSIGN expr SEMICOLON .
 
     $default  reduce using rule 7 (stmt)
 
 
-state 42
+state 58
 
     5 decl: INT IDENTIFIER ASSIGN expr SEMICOLON .
 
     $default  reduce using rule 5 (decl)
+
+
+state 59
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE . stmt_list RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr RPAREN LBRACE . stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt       go to state 62
+    stmt_list  go to state 63
+
+
+state 60
+
+   10 stmt: WHILE LPAREN expr RPAREN LBRACE . stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt       go to state 62
+    stmt_list  go to state 64
+
+
+state 61
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON . stmt RPAREN LBRACE stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 65
+
+
+state 62
+
+   19 stmt_list: stmt .
+
+    $default  reduce using rule 19 (stmt_list)
+
+
+state 63
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list . RBRACE ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr RPAREN LBRACE stmt_list . RBRACE
+   20 stmt_list: stmt_list . stmt
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    RBRACE      shift, and go to state 66
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 67
+
+
+state 64
+
+   10 stmt: WHILE LPAREN expr RPAREN LBRACE stmt_list . RBRACE
+   20 stmt_list: stmt_list . stmt
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    RBRACE      shift, and go to state 68
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 67
+
+
+state 65
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON stmt . RPAREN LBRACE stmt_list RBRACE
+
+    RPAREN  shift, and go to state 69
+
+
+state 66
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list RBRACE . ELSE LBRACE stmt_list RBRACE
+   13     | IF LPAREN expr RPAREN LBRACE stmt_list RBRACE .
+
+    ELSE  shift, and go to state 70
+
+    $default  reduce using rule 13 (stmt)
+
+
+state 67
+
+   20 stmt_list: stmt_list stmt .
+
+    $default  reduce using rule 20 (stmt_list)
+
+
+state 68
+
+   10 stmt: WHILE LPAREN expr RPAREN LBRACE stmt_list RBRACE .
+
+    $default  reduce using rule 10 (stmt)
+
+
+state 69
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON stmt RPAREN . LBRACE stmt_list RBRACE
+
+    LBRACE  shift, and go to state 71
+
+
+state 70
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE . LBRACE stmt_list RBRACE
+
+    LBRACE  shift, and go to state 72
+
+
+state 71
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON stmt RPAREN LBRACE . stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt       go to state 62
+    stmt_list  go to state 73
+
+
+state 72
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE . stmt_list RBRACE
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    IDENTIFIER  shift, and go to state 10
+
+    stmt       go to state 62
+    stmt_list  go to state 74
+
+
+state 73
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON stmt RPAREN LBRACE stmt_list . RBRACE
+   20 stmt_list: stmt_list . stmt
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    RBRACE      shift, and go to state 75
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 67
+
+
+state 74
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list . RBRACE
+   20 stmt_list: stmt_list . stmt
+
+    error       shift, and go to state 4
+    RETURN      shift, and go to state 6
+    IF          shift, and go to state 7
+    WHILE       shift, and go to state 8
+    FOR         shift, and go to state 9
+    RBRACE      shift, and go to state 76
+    IDENTIFIER  shift, and go to state 10
+
+    stmt  go to state 67
+
+
+state 75
+
+   11 stmt: FOR LPAREN stmt expr SEMICOLON stmt RPAREN LBRACE stmt_list RBRACE .
+
+    $default  reduce using rule 11 (stmt)
+
+
+state 76
+
+   12 stmt: IF LPAREN expr RPAREN LBRACE stmt_list RBRACE ELSE LBRACE stmt_list RBRACE .
+
+    $default  reduce using rule 12 (stmt)

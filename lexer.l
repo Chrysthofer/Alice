@@ -14,6 +14,10 @@ number      {digit}+
 [ \t]       ; // Ignore spaces and tabs
 "int"       { return INT; }
 "return"    { return RETURN; }
+"if"        { return IF; }
+"else"      { return ELSE; }
+"while"     { return WHILE; }
+"for"       { return FOR; }
 "+"         { return PLUS; }
 "-"         { return MINUS; }
 "*"         { return TIMES; }
@@ -28,6 +32,8 @@ number      {digit}+
 ">"         { return GT; }
 "<="        { return LE; }
 ">="        { return GE; }
+"++"        { return PLUSPLUS; }
+"--"        { return MINUSMINUS; }
 
 {identifier} {
     yylval.sval = strdup(yytext);
