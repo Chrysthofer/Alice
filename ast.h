@@ -9,11 +9,13 @@ typedef struct ASTNode {
     struct ASTNode *fourth;
     union {
         int ival;
+        float fval;
+        double dval;
         char *sval;
     } value;
 } ASTNode;
 
-ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, ASTNode *fourth, int ival, char *sval);
+ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, ASTNode *fourth, int ival, float fval, double dval, char *sval);
 void generate_code(ASTNode *node);
 
 #endif // AST_H

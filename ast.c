@@ -6,7 +6,7 @@
 
 FILE *outfile;
 
-ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, ASTNode *fourth, int ival, char *sval) {
+ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, ASTNode *fourth, int ival, float fval, double dval, char *sval) {
     ASTNode *node = (ASTNode *)malloc(sizeof(ASTNode));
     node->type = type;
     node->left = left;
@@ -15,6 +15,10 @@ ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, AST
     node->fourth = fourth;
     if (sval) {
         node->value.sval = strdup(sval);
+    } else if(type == 'FL'){
+        node->value.fval = fval;
+    } else if(type == 'DB'){
+        node->value.dval = dval;
     } else {
         node->value.ival = ival;
     }
@@ -22,6 +26,24 @@ ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *next, AST
 }
 
 static int labelCount = 0; // Global static variable to maintain label count
+
+char *format_float(double value) {
+    char buffer[50];
+    // Format the float with a maximum of 15 decimal places
+    snprintf(buffer, sizeof(buffer), "%.15f", value);
+    
+    // Remove trailing zeros and the decimal point if it's unnecessary
+    char *end = buffer + strlen(buffer) - 1;
+    while (end > buffer && *end == '0') {
+        end--;
+    }
+    if (*end == '.') {
+        end--;
+    }
+    *(end + 1) = '\0';
+
+    return strdup(buffer);
+}
 
 void generate_code(ASTNode *node) {
     if (!node) return;
@@ -44,7 +66,7 @@ void generate_code(ASTNode *node) {
             break;
         }
         case '--': {
-            // Handle increment operation
+            // Handle decrement operation
             fprintf(outfile, "LOAD %s\n", node->value.sval);
             fprintf(outfile, "CONST 1\n");
             fprintf(outfile, "SUB R0, R1\n");
@@ -81,6 +103,20 @@ void generate_code(ASTNode *node) {
         case 'N':
             fprintf(outfile, "CONST %d\n", node->value.ival);
             break;
+        case 'FL': {
+            // Handle floating-point number formatting
+            char *formatted = format_float(node->value.fval);
+            fprintf(outfile, "CONST %s\n", formatted);
+            free(formatted);
+            break;
+        }
+        case 'DB': {
+            // Handle double-precision number formatting
+            char *formatted = format_float(node->value.dval);
+            fprintf(outfile, "CONST %s\n", formatted);
+            free(formatted);
+            break;
+        }
         case 'R':
             generate_code(node->left);
             fprintf(outfile, "RETURN\n");
@@ -97,10 +133,6 @@ void generate_code(ASTNode *node) {
 
             fprintf(outfile, "JMP L%d\n", endLabel);
             fprintf(outfile, "L%d:\n", elseLabel);
-
-            if (node->next) { // Else part
-                generate_code(node->next);
-            }
 
             fprintf(outfile, "L%d:\n", endLabel);
             break;
@@ -139,7 +171,7 @@ void generate_code(ASTNode *node) {
             fprintf(outfile, "L%d:\n", endLabel);
             break;
         }
-        case 'F': { // For loop (general handling)
+        case 'F': { // For loop
             int startLabel = labelCount++;
             int endLabel = labelCount++;
             int continueLabel = labelCount++;
@@ -160,11 +192,15 @@ void generate_code(ASTNode *node) {
             fprintf(outfile, "L%d:\n", endLabel);
             break;
         }
-        default:
-            fprintf(outfile, "UNKNOWN OPERATION\n");
+        case 'B':
+            fprintf(outfile, "CONST %d\n", node->value.ival);
             break;
+        default:
+        fprintf(outfile, "UNKNOWN OPERATION\n");
+        break;
     }
 }
+
 
 void generate_code_from_ast(ASTNode *node) {
     outfile = fopen("test.asm", "w");

@@ -50,29 +50,35 @@
       know about them.  */
    enum yytokentype {
      INT = 258,
-     RETURN = 259,
-     IF = 260,
-     ELSE = 261,
-     WHILE = 262,
-     FOR = 263,
-     PLUS = 264,
-     MINUS = 265,
-     TIMES = 266,
-     DIVIDE = 267,
-     ASSIGN = 268,
-     SEMICOLON = 269,
-     PLUSPLUS = 270,
-     MINUSMINUS = 271,
-     LPAREN = 272,
-     RPAREN = 273,
-     LBRACE = 274,
-     RBRACE = 275,
-     LT = 276,
-     GT = 277,
-     LE = 278,
-     GE = 279,
-     IDENTIFIER = 280,
-     NUMBER = 281
+     FLOAT = 259,
+     DOUBLE = 260,
+     RETURN = 261,
+     TRUE = 262,
+     FALSE = 263,
+     IF = 264,
+     ELSE = 265,
+     WHILE = 266,
+     FOR = 267,
+     PLUS = 268,
+     MINUS = 269,
+     TIMES = 270,
+     DIVIDE = 271,
+     ASSIGN = 272,
+     SEMICOLON = 273,
+     PLUSPLUS = 274,
+     MINUSMINUS = 275,
+     LPAREN = 276,
+     RPAREN = 277,
+     LBRACE = 278,
+     RBRACE = 279,
+     LT = 280,
+     GT = 281,
+     LE = 282,
+     GE = 283,
+     IDENTIFIER = 284,
+     NUMBER = 285,
+     FLOAT_NUMBER = 286,
+     DOUBLE_NUMBER = 287
    };
 #endif
 
@@ -86,13 +92,15 @@ typedef union YYSTYPE
 #line 19 "parser.y"
 
     int ival;
+    float fval;
+    double dval;
     char *sval;
     ASTNode *node;
 
 
 
 /* Line 1685 of yacc.c  */
-#line 96 "parser.tab.h"
+#line 104 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
