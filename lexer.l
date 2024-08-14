@@ -1,6 +1,9 @@
 %{
 #include "parser.tab.h"
+#include "handle_include.c"
 extern int yylineno; // Line number variable from Bison
+extern FILE *yyin;
+void handle_include(const char *filename); // Multiple files
 %}
 
 digit             [0-9]
@@ -13,12 +16,19 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 
 %%
 
+"#include"[ \t]*\"{identifier}.c\" {
+    char filename[256];
+    sscanf(yytext, "#include \"%[^\"]\"", filename);
+    handle_include(filename);
+}
+
 \n          { yylineno++;        }
 "//".*               ; 
 "/*"([^*]|\*+[^/])*\*+"/"   ;
 [ \t]       ; // Ignore spaces and tabs
 "int"       { return INT;        }
 "float"     { return FLOAT;      }
+"void"      { return VOID;       }
 "double"    { return DOUBLE;     }
 "return"    { return RETURN;     }
 "if"        { return IF;         }
@@ -27,12 +37,16 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 "for"       { return FOR;        }
 "true"      { return TRUE;       }
 "false"     { return FALSE;      }
+"&&"        { return AND;        }
+"||"        { return OR;         }
 "+"         { return PLUS;       }
 "-"         { return MINUS;      }
 "*"         { return TIMES;      }
 "/"         { return DIVIDE;     }
 "="         { return ASSIGN;     }
+"=="        { return EQUAL;      }
 ";"         { return SEMICOLON;  }
+","         { return COMMA;      }
 "("         { return LPAREN;     }
 ")"         { return RPAREN;     }
 "{"         { return LBRACE;     }

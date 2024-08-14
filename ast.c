@@ -97,6 +97,36 @@ void generate_code(ASTNode *node) {
             generate_code(node->right);
             fprintf(outfile, "STORE %s\n", node->value.sval);
             break;
+        case '==':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "EQU %s\n", node->value.sval);
+            break;
+        case 'FUNC': {
+            // Function label
+            fprintf(outfile, "FUNC %s\n", node->value.sval);
+
+            // Push function parameters in reverse order
+            if (node->left) {
+                // Collect parameters in a stack
+                ASTNode *params = node->left;
+                // Push parameters in reverse order
+                while (params) {
+                    fprintf(outfile, "PUSH %s\n", params->value.sval);
+                    params = params->right;
+                }
+            }
+
+            // Function body
+            generate_code(node->right);
+
+            // Return statement at the end of the function
+            fprintf(outfile, "RETURN\n");
+            break;
+        }
+        case 'P':
+            fprintf(outfile, "PUSH %s\n", node->value.sval);
+            break;
         case 'I':
             fprintf(outfile, "LOAD %s\n", node->value.sval);
             break;
@@ -117,10 +147,12 @@ void generate_code(ASTNode *node) {
             free(formatted);
             break;
         }
-        case 'R':
+        case 'R': {
+            // Return statement
             generate_code(node->left);
             fprintf(outfile, "RETURN\n");
             break;
+        }
         case 'IF': {
             int elseLabel = labelCount++;
             int endLabel = labelCount++;

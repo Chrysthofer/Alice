@@ -51,34 +51,37 @@
    enum yytokentype {
      INT = 258,
      FLOAT = 259,
-     DOUBLE = 260,
-     RETURN = 261,
-     TRUE = 262,
-     FALSE = 263,
-     IF = 264,
-     ELSE = 265,
-     WHILE = 266,
-     FOR = 267,
-     PLUS = 268,
-     MINUS = 269,
-     TIMES = 270,
-     DIVIDE = 271,
-     ASSIGN = 272,
-     SEMICOLON = 273,
-     PLUSPLUS = 274,
-     MINUSMINUS = 275,
-     LPAREN = 276,
-     RPAREN = 277,
-     LBRACE = 278,
-     RBRACE = 279,
-     LT = 280,
-     GT = 281,
-     LE = 282,
-     GE = 283,
-     IDENTIFIER = 284,
-     NUMBER = 285,
-     FLOAT_NUMBER = 286,
-     DOUBLE_NUMBER = 287
+     VOID = 260,
+     DOUBLE = 261,
+     RETURN = 262,
+     TRUE = 263,
+     FALSE = 264,
+     IF = 265,
+     ELSE = 266,
+     WHILE = 267,
+     FOR = 268,
+     PLUS = 269,
+     MINUS = 270,
+     TIMES = 271,
+     DIVIDE = 272,
+     ASSIGN = 273,
+     EQUAL = 274,
+     SEMICOLON = 275,
+     PLUSPLUS = 276,
+     MINUSMINUS = 277,
+     LPAREN = 278,
+     RPAREN = 279,
+     LBRACE = 280,
+     RBRACE = 281,
+     COMMA = 282,
+     LT = 283,
+     GT = 284,
+     LE = 285,
+     GE = 286,
+     IDENTIFIER = 287,
+     NUMBER = 288,
+     FLOAT_NUMBER = 289,
+     DOUBLE_NUMBER = 290
    };
 #endif
 
@@ -100,7 +103,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 104 "parser.tab.h"
+#line 107 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
