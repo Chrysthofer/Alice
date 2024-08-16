@@ -9,7 +9,7 @@ void handle_include(const char *filename); // Multiple files
 digit             [0-9]
 letter            [a-zA-Z]
 identifier        {letter}({letter}|{digit})*
-number            {digit}+
+number            -?{digit}+
 double_number     {digit}*\.{digit}+([eE][+-]?{digit}+)?|{digit}+\.[{digit}]*[eE][+-]?{digit}+
 float_number      [0-9]*\.[0-9]+([eE][+-]?[0-9]+)?
 scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
@@ -28,29 +28,36 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 [ \t]       ; // Ignore spaces and tabs
 "int"       { return INT;        }
 "float"     { return FLOAT;      }
-"void"      { return VOID;       }
 "double"    { return DOUBLE;     }
 "return"    { return RETURN;     }
 "if"        { return IF;         }
 "else"      { return ELSE;       }
 "while"     { return WHILE;      }
 "for"       { return FOR;        }
+"in"        { return IN;         }
+"out"       { return OUT;        }
 "true"      { return TRUE;       }
 "false"     { return FALSE;      }
 "&&"        { return AND;        }
 "||"        { return OR;         }
+"^"         { return XOR;        }
+"/>"        { return NORM;       }
 "+"         { return PLUS;       }
 "-"         { return MINUS;      }
 "*"         { return TIMES;      }
 "/"         { return DIVIDE;     }
+"%"         { return MODULUS;    }
 "="         { return ASSIGN;     }
 "=="        { return EQUAL;      }
+"!="        { return DIF;        }
 ";"         { return SEMICOLON;  }
 ","         { return COMMA;      }
 "("         { return LPAREN;     }
 ")"         { return RPAREN;     }
 "{"         { return LBRACE;     }
 "}"         { return RBRACE;     }
+"["        { return  LBRACKET;   }
+"]"        { return  RBRACKET;   }
 "<"         { return LT;         }
 ">"         { return GT;         }
 "<="        { return LE;         }

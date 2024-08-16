@@ -88,19 +88,73 @@ void generate_code(ASTNode *node) {
             generate_code(node->right);
             fprintf(outfile, "DIV R0, R1\n");
             break;
+        case '%':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "MOD\n");
+            break;
         case '<':
             generate_code(node->left);
             generate_code(node->right);
             fprintf(outfile, "LT R0, R1\n");
             break;
+        case '>':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "GT R0, R1\n");
+            break;
         case '=':
             generate_code(node->right);
             fprintf(outfile, "STORE %s\n", node->value.sval);
             break;
-        case '==':
+        case 'DIF':
             generate_code(node->left);
             generate_code(node->right);
-            fprintf(outfile, "EQU %s\n", node->value.sval);
+            fprintf(outfile, "EQU\n");
+            fprintf(outfile, "INV\n");
+            break;
+        case 'IN':
+            generate_code(node->left);
+            fprintf(outfile, "PUSH\n");
+            fprintf(outfile, "IN\n");
+            break;
+        case 'OUT':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "OUT\n");
+            break;
+        case 'SEQU':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "SEQU\n");
+            break;
+        case 'EQU':
+            generate_code(node->right);
+            fprintf(outfile, "EQU %s\n", node->value.sval); // SEQU uses the identifier directly
+            break;
+        case '&&':
+            generate_code(node->left);  // Evaluate left side
+            generate_code(node->right);  // Evaluate right side
+            fprintf(outfile, "AND\n");  // Apply AND operation
+            break;
+        case '||': {
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "OR\n");
+            break;
+        }
+        case '^':
+            generate_code(node->left);
+            generate_code(node->right);
+            fprintf(outfile, "XOR\n");
+            break;
+        case '/>':
+            generate_code(node->left);
+            fprintf(outfile, "NORM\n");
+            break;
+        case 'ARA':
+            generate_code(node->left);
+
             break;
         case 'FUNC': {
             // Function label

@@ -1,14 +1,3 @@
-int a = 5;
+#include "test2.c"
 
-while(a == 2*5){return b;}
-
-return b;
-
-int c = 666;
-
-int b = 6;
-int c = 10;
-int d = 2.0;
-void add(float c, int a) {
-    return a + b;
-}
+while( a > 2 ^ b > 2){return 0;}
