@@ -1,7 +1,10 @@
 LOAD a
 ADD b
 PLD c
-ADD d
-SMUL
-SET e
+SADD
+PLD d
+SADD
+PLD e
+SADD
+SET g
 ROOT

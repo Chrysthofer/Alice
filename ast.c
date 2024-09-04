@@ -20,20 +20,11 @@ ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *back, AST
     }
     else if (type == 'FL')
     {
-    }
-    else if (type == 'FL')
-    {
         node->value.fval = fval;
     }
     else if (type == 'DB')
     {
-    }
-    else if (type == 'DB')
-    {
         node->value.dval = dval;
-    }
-    else
-    {
     }
     else
     {
@@ -45,28 +36,19 @@ ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *back, AST
 static int labelCount = 0; // Global static variable to maintain label count
 int acc_state = 0;
 int stk_state = 0;
-int acc_state = 0;
-int stk_state = 0;
 
-char *format_float(double value)
-{
 char *format_float(double value)
 {
     char buffer[50];
     // Format the float with a maximum of 15 decimal places
     snprintf(buffer, sizeof(buffer), "%.15f", value);
 
-
     // Remove trailing zeros and the decimal point if it's unnecessary
     char *end = buffer + strlen(buffer) - 1;
     while (end > buffer && *end == '0')
     {
-    while (end > buffer && *end == '0')
-    {
         end--;
     }
-    if (*end == '.')
-    {
     if (*end == '.')
     {
         end--;
@@ -112,7 +94,7 @@ void generate_code(ASTNode *node)
         fprintf(outfile, "LOAD %s\n", node->value.sval);
         fprintf(outfile, "CONST 1\n");
         fprintf(outfile, "ADD R0, R1\n");
-        fprintf(outfile, "STORE %s\n", node->value.sval);
+        fprintf(outfile, "SET %s\n", node->value.sval);
         break;
     }
     case '--':
@@ -121,7 +103,7 @@ void generate_code(ASTNode *node)
         fprintf(outfile, "LOAD %s\n", node->value.sval);
         fprintf(outfile, "CONST 1\n");
         fprintf(outfile, "SUB R0, R1\n");
-        fprintf(outfile, "STORE %s\n", node->value.sval);
+        fprintf(outfile, "SET %s\n", node->value.sval);
         break;
     }
     case '-':
@@ -130,9 +112,20 @@ void generate_code(ASTNode *node)
         fprintf(outfile, "SUB R0, R1\n");
         break;
     case '*':
-        generate_code(node->left);
-        generate_code(node->right);
-        fprintf(outfile, "SMUL\n");
+
+        if (node->left != NULL && node->left->type == '*')
+        {
+            generate_code(node->left);                             // Recur on left subtree
+            fprintf(outfile, "PLD %s\n", node->right->value.sval); // Load next value onto the stack
+            fprintf(outfile, "SMLT\n");                            // Add the stack value to the accumulator
+        }
+        else
+        {
+            generate_code(node->left);                             // Handle the leftmost operand
+            fprintf(outfile, "MLT %s\n", node->right->value.sval); // Add the right operand
+        }
+        acc_state = 1;
+
         break;
     case '/':
         generate_code(node->left);
@@ -212,11 +205,6 @@ void generate_code(ASTNode *node)
     {
         // Function label
         fprintf(outfile, "FUNC %s\n", node->value.sval);
-        break;
-    case 'FUNC':
-    {
-        // Function label
-        fprintf(outfile, "FUNC %s\n", node->value.sval);
 
         // Push function parameters in reverse order
         if (node->left)
@@ -230,21 +218,7 @@ void generate_code(ASTNode *node)
                 params = params->right;
             }
         }
-        // Push function parameters in reverse order
-        if (node->left)
-        {
-            // Collect parameters in a stack
-            ASTNode *params = node->left;
-            // Push parameters in reverse order
-            while (params)
-            {
-                fprintf(outfile, "PUSH %s\n", params->value.sval);
-                params = params->right;
-            }
-        }
 
-        // Function body
-        generate_code(node->right);
         // Function body
         generate_code(node->right);
 
@@ -270,7 +244,7 @@ void generate_code(ASTNode *node)
 
         break;
     case 'N':
-        fprintf(outfile, "LOAD %d\n", node->value.ival);
+        fprintf(outfile, "CONST %d\n", node->value.ival);
         break;
     case 'FL':
     {
@@ -303,15 +277,9 @@ void generate_code(ASTNode *node)
         generate_code(node->left); // Condition
         fprintf(outfile, "CMP R0, 0\n");
         fprintf(outfile, "JE L%d\n", elseLabel);
-        generate_code(node->left); // Condition
-        fprintf(outfile, "CMP R0, 0\n");
-        fprintf(outfile, "JE L%d\n", elseLabel);
 
         generate_code(node->right); // If body
-        generate_code(node->right); // If body
 
-        fprintf(outfile, "JMP L%d\n", endLabel);
-        fprintf(outfile, "L%d:\n", elseLabel);
         fprintf(outfile, "JMP L%d\n", endLabel);
         fprintf(outfile, "L%d:\n", elseLabel);
 
@@ -322,26 +290,13 @@ void generate_code(ASTNode *node)
     {
         int elseLabel = labelCount++;
         int endLabel = labelCount++;
-        fprintf(outfile, "L%d:\n", endLabel);
-        break;
-    }
-    case 'E':
-    {
-        int elseLabel = labelCount++;
-        int endLabel = labelCount++;
 
-        generate_code(node->left); // Condition
-        fprintf(outfile, "CMP R0, 0\n");
-        fprintf(outfile, "JE L%d\n", elseLabel);
         generate_code(node->left); // Condition
         fprintf(outfile, "CMP R0, 0\n");
         fprintf(outfile, "JE L%d\n", elseLabel);
 
         generate_code(node->right); // If body
-        generate_code(node->right); // If body
 
-        fprintf(outfile, "JMP L%d\n", endLabel);
-        fprintf(outfile, "L%d:\n", elseLabel);
         fprintf(outfile, "JMP L%d\n", endLabel);
         fprintf(outfile, "L%d:\n", elseLabel);
 
@@ -356,24 +311,11 @@ void generate_code(ASTNode *node)
         int endLabel = labelCount++;
 
         fprintf(outfile, "L%d:\n", startLabel);
-        fprintf(outfile, "L%d:\n", endLabel);
-        break;
-    }
-    case 'W':
-    { // While loop
-        int startLabel = labelCount++;
-        int endLabel = labelCount++;
-
-        fprintf(outfile, "L%d:\n", startLabel);
 
         generate_code(node->left); // Condition
         fprintf(outfile, "CMP R0, 0\n");
         fprintf(outfile, "JE L%d\n", endLabel);
-        generate_code(node->left); // Condition
-        fprintf(outfile, "CMP R0, 0\n");
-        fprintf(outfile, "JE L%d\n", endLabel);
 
-        generate_code(node->right); // Body
         generate_code(node->right); // Body
 
         fprintf(outfile, "JMP L%d\n", startLabel);
@@ -387,11 +329,9 @@ void generate_code(ASTNode *node)
         int continueLabel = labelCount++;
 
         generate_code(node->left); // Initialization
+
         fprintf(outfile, "L%d:\n", startLabel);
 
-        generate_code(node->right); // Condition
-        fprintf(outfile, "CMP R0, 0\n");
-        fprintf(outfile, "JE L%d\n", endLabel);
         generate_code(node->right); // Condition
         fprintf(outfile, "CMP R0, 0\n");
         fprintf(outfile, "JE L%d\n", endLabel);
@@ -415,11 +355,7 @@ void generate_code(ASTNode *node)
 
 void generate_code_from_ast(ASTNode *node)
 {
-void generate_code_from_ast(ASTNode *node)
-{
     outfile = fopen("test.asm", "w");
-    if (!outfile)
-    {
     if (!outfile)
     {
         perror("fopen");
@@ -428,12 +364,7 @@ void generate_code_from_ast(ASTNode *node)
 
     if (node)
     {
-    if (node)
-    {
         generate_code(node);
-    }
-    else
-    {
     }
     else
     {

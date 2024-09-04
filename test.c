@@ -1,1 +1,1 @@
-int e = (a + b) * (c + d);
+int g = a+b+c+d+e;
