@@ -1023,12 +1023,12 @@ YY_RULE_SETUP
 case 36:
 YY_RULE_SETUP
 #line 59 "lexer.l"
-{ return  LBRACKET;   }
+{ return LBRACKET;   }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 60 "lexer.l"
-{ return  RBRACKET;   }
+{ return RBRACKET;   }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP

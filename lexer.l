@@ -56,8 +56,8 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 ")"         { return RPAREN;     }
 "{"         { return LBRACE;     }
 "}"         { return RBRACE;     }
-"["        { return  LBRACKET;   }
-"]"        { return  RBRACKET;   }
+"["         { return LBRACKET;   }
+"]"         { return RBRACKET;   }
 "<"         { return LT;         }
 ">"         { return GT;         }
 "<="        { return LE;         }

@@ -51,8 +51,9 @@ void generate_code_from_ast(ASTNode *node);
 %%
 
 program:
-    decls { generate_code_from_ast($1); }
+    decls { $$ = create_node('RTN', $1, NULL, NULL, NULL, 0, 0.0, 0.0, NULL); generate_code_from_ast($$); }
 ;
+
 
 decls:
     decls decl    { $$ = create_node(';', $1, $2, NULL, NULL, 0, 0.0, 0.0, NULL); }
@@ -118,8 +119,8 @@ stmt:
     | IDENTIFIER PLUSPLUS                                                        { $$ = create_node('++', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);  }
     | IDENTIFIER MINUSMINUS SEMICOLON                                            { $$ = create_node('--', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);  }
     | IDENTIFIER MINUSMINUS                                                      { $$ = create_node('--', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);  }
-    | INT IDENTIFIER LBRACKET RBRACKET EQUAL LBRACE expr RBRACE SEMICOLON        { $$ = create_node('ARA', $7, NULL, NULL, NULL, 0, 0.0, 0.0, $2);   } 
-    | FLOAT IDENTIFIER LBRACKET RBRACKET EQUAL LBRACE expr RBRACE SEMICOLON      { $$ = create_node('ARA', $7, NULL, NULL, NULL, 0, 0.0, 0.0, $2);   } 
+    | INT IDENTIFIER LBRACKET RBRACKET EQUAL LBRACE expr RBRACE SEMICOLON        { $$ = create_node('ARA', $7, NULL, NULL, NULL, 0, 0.0, 0.0, $2);   }
+    | FLOAT IDENTIFIER LBRACKET RBRACKET EQUAL LBRACE expr RBRACE SEMICOLON      { $$ = create_node('ARA', $7, NULL, NULL, NULL, 0, 0.0, 0.0, $2);   }
     | error SEMICOLON                                                            { yyerror("Syntax error in statement"); yyerrok; YYABORT;           }
 ;
 
@@ -142,9 +143,9 @@ expr:
     | expr XOR expr                               { $$ = create_node('^', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);      }
     | expr COMMA                                  { $$ = $1;                                                           }
     | IDENTIFIER EQUAL expr                       { $$ = create_node('EQU', NULL, $3, NULL, NULL, 0, 0.0, 0.0, $1);    }
-    | expr DIF expr                               { $$ = create_node('DIF', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);    }
+    | expr DIF expr                               { $$ = create_node('DIF', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);    } 
     | expr EQUAL expr                             { $$ = create_node('SEQU', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);   }
-    | boolean_literal                                                                          
+    | boolean_literal                                                                                                   
     | IDENTIFIER                                  { $$ = create_node('I', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);    }
     | NUMBER                                      { $$ = create_node('N', NULL, NULL, NULL, NULL, $1, 0.0, 0.0, NULL); }
     | FLOAT_NUMBER                                { $$ = create_node('FL', NULL, NULL, NULL, NULL, 0, $1, 0.0, NULL);  }

@@ -1,3 +1,1 @@
-#include "test2.c"
-
-while( a > 2 ^ b > 2){return 0;}
+int e = (a + b) * (c + d);
