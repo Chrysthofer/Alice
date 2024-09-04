@@ -1,3 +1,2 @@
-#include "test2.c"
+z = a + b + c + d + e + f;
 
-while( a > 2 ^ b > 2){return 0;}

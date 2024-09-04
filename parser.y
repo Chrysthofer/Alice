@@ -46,6 +46,7 @@ void generate_code_from_ast(ASTNode *node);
 %left EQUAL
 %left LT GT LE GE
 %left PLUS MINUS
+%left '+'
 %left TIMES DIVIDE
 
 %%
