@@ -1,1 +1,1 @@
-int g = a+b+c+d+e;
+int a = 351.10;

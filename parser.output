@@ -80,7 +80,7 @@ Grammar
    46     | expr EQUAL expr
    47     | boolean_literal
    48     | IDENTIFIER
-   49     | NUMBER
+   49     | INT_NUMBER
    50     | FLOAT_NUMBER
    51     | DOUBLE_NUMBER
    52     | LPAREN expr RPAREN
@@ -133,7 +133,7 @@ GE (293) 39
 IN (294) 21 53
 OUT (295) 20
 IDENTIFIER (296) 4 5 6 7 8 9 13 14 22 23 24 25 26 27 44 48
-NUMBER (297) 49
+INT_NUMBER (297) 49
 FLOAT_NUMBER (298) 50
 DOUBLE_NUMBER (299) 51
 
@@ -252,7 +252,7 @@ state 8
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -394,7 +394,7 @@ state 24
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -413,7 +413,7 @@ state 25
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -441,7 +441,7 @@ state 27
 
 state 28
 
-   49 expr: NUMBER .
+   49 expr: INT_NUMBER .
 
     $default  reduce using rule 49 (expr)
 
@@ -516,7 +516,7 @@ state 33
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -535,7 +535,7 @@ state 34
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -572,7 +572,7 @@ state 36
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -591,7 +591,7 @@ state 37
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -611,7 +611,7 @@ state 38
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -650,7 +650,7 @@ state 41
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -683,7 +683,7 @@ state 44
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -716,7 +716,7 @@ state 47
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -832,7 +832,7 @@ state 51
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -851,7 +851,7 @@ state 52
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -870,7 +870,7 @@ state 53
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -889,7 +889,7 @@ state 54
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -908,7 +908,7 @@ state 55
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -927,7 +927,7 @@ state 56
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -946,7 +946,7 @@ state 57
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -965,7 +965,7 @@ state 58
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -984,7 +984,7 @@ state 59
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1003,7 +1003,7 @@ state 60
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1022,7 +1022,7 @@ state 61
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1041,7 +1041,7 @@ state 62
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1074,7 +1074,7 @@ state 65
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1093,7 +1093,7 @@ state 66
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1112,7 +1112,7 @@ state 67
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1131,7 +1131,7 @@ state 68
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -1239,7 +1239,7 @@ state 73
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -2151,7 +2151,7 @@ state 107
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -2336,7 +2336,7 @@ state 120
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 
@@ -2355,7 +2355,7 @@ state 121
     LPAREN         shift, and go to state 25
     IN             shift, and go to state 26
     IDENTIFIER     shift, and go to state 27
-    NUMBER         shift, and go to state 28
+    INT_NUMBER     shift, and go to state 28
     FLOAT_NUMBER   shift, and go to state 29
     DOUBLE_NUMBER  shift, and go to state 30
 

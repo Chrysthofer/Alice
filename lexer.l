@@ -9,7 +9,7 @@ void handle_include(const char *filename); // Multiple files
 digit             [0-9]
 letter            [a-zA-Z]
 identifier        {letter}({letter}|{digit})*
-number            -?{digit}+
+int_number        -?{digit}+
 double_number     {digit}*\.{digit}+([eE][+-]?{digit}+)?|{digit}+\.[{digit}]*[eE][+-]?{digit}+
 float_number      [0-9]*\.[0-9]+([eE][+-]?[0-9]+)?
 scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
@@ -82,12 +82,12 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 
 {scientific_number} {
     yylval.fval = atof(yytext);
-    return FLOAT_NUMBER;
+    return SCIENTIFIC_NUMBER;
 }
 
-{number}    {
+{int_number}    {
     yylval.ival = atoi(yytext);
-    return NUMBER;
+    return INT_NUMBER;
 }
 
 [ \t\n]+    { /* skip whitespace */ }

@@ -88,7 +88,7 @@
      IN = 294,
      OUT = 295,
      IDENTIFIER = 296,
-     NUMBER = 297,
+     INT_NUMBER = 297,
      FLOAT_NUMBER = 298,
      DOUBLE_NUMBER = 299
    };

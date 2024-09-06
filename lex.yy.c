@@ -1089,7 +1089,7 @@ YY_RULE_SETUP
 #line 83 "lexer.l"
 {
     yylval.fval = atof(yytext);
-    return FLOAT_NUMBER;
+    return SCIENTIFIC_NUMBER;
 }
 	YY_BREAK
 case 48:
@@ -1097,7 +1097,7 @@ YY_RULE_SETUP
 #line 88 "lexer.l"
 {
     yylval.ival = atoi(yytext);
-    return NUMBER;
+    return INT_NUMBER;
 }
 	YY_BREAK
 case 49:
