@@ -92,7 +92,7 @@ void generate_code(ASTNode *node)
     {
         // Handle increment operation
         fprintf(outfile, "LOAD %s\n", node->value.sval);
-        fprintf(outfile, "CONST 1\n");
+        fprintf(outfile, "LOAD 1\n");
         fprintf(outfile, "ADD R0, R1\n");
         fprintf(outfile, "SET %s\n", node->value.sval);
         break;
@@ -101,7 +101,7 @@ void generate_code(ASTNode *node)
     {
         // Handle decrement operation
         fprintf(outfile, "LOAD %s\n", node->value.sval);
-        fprintf(outfile, "CONST 1\n");
+        fprintf(outfile, "LOAD 1\n");
         fprintf(outfile, "SUB R0, R1\n");
         fprintf(outfile, "SET %s\n", node->value.sval);
         break;
@@ -244,13 +244,13 @@ void generate_code(ASTNode *node)
 
         break;
     case 'N':
-        fprintf(outfile, "CONST %d\n", node->value.ival);
+        fprintf(outfile, "LOAD %d\n", node->value.ival);
         break;
     case 'FL':
     {
         // Handle floating-point number formatting
         char *formatted = format_float(node->value.fval);
-        fprintf(outfile, "CONST %s\n", formatted);
+        fprintf(outfile, "LOAD %s\n", formatted);
         free(formatted);
         break;
     }
@@ -258,7 +258,7 @@ void generate_code(ASTNode *node)
     {
         // Handle double-precision number formatting
         char *formatted = format_float(node->value.dval);
-        fprintf(outfile, "CONST %s\n", formatted);
+        fprintf(outfile, "LOAD %s\n", formatted);
         free(formatted);
         break;
     }
@@ -345,7 +345,7 @@ void generate_code(ASTNode *node)
         break;
     }
     case 'B':
-        fprintf(outfile, "CONST %d\n", node->value.ival);
+        fprintf(outfile, "LOAD %d\n", node->value.ival);
         break;
     default:
         fprintf(outfile, "UNKNOWN OPERATION\n");

@@ -1,0 +1,2 @@
+#include "test.c"
+return 2;

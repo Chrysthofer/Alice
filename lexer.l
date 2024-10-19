@@ -16,7 +16,7 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 
 %%
 
-"#include"[ \t]*\"{identifier}.c\" {
+"#include"[ \t]*\"{identifier}.cmm\" {
     char filename[256];
     sscanf(yytext, "#include \"%[^\"]\"", filename);
     handle_include(filename);
