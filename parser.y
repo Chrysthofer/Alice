@@ -32,7 +32,7 @@ void generate_code_from_ast(ASTNode *node);
 %token LT GT LE GE
 %token IN OUT
 %token <sval> IDENTIFIER
-%token <ival> NUMBER
+%token <ival> INT_NUMBER
 %token <fval> FLOAT_NUMBER
 %token <dval> DOUBLE_NUMBER
 
@@ -137,8 +137,8 @@ expr:
     | expr MODULUS expr                           { $$ = create_node('%', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);      }
     | expr LT expr                                { $$ = create_node('<', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);      }
     | expr GT expr                                { $$ = create_node('>', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);      }
-    | expr LE expr                                { $$ = create_node(LE, $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);       }
-    | expr GE expr                                { $$ = create_node(GE, $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);       }
+    | expr LE expr                                { $$ = create_node('<=', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);       }
+    | expr GE expr                                { $$ = create_node('>=', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);       }
     | expr AND expr                               { $$ = create_node('&&', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);     }
     | expr OR expr                                { $$ = create_node('||', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);     }
     | expr XOR expr                               { $$ = create_node('^', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);      }
@@ -148,9 +148,9 @@ expr:
     | expr EQUAL expr                             { $$ = create_node('SEQU', $1, $3, NULL, NULL, 0, 0.0, 0.0, NULL);   }
     | boolean_literal                                                                                                   
     | IDENTIFIER                                  { $$ = create_node('I', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);    }
-    | NUMBER                                      { $$ = create_node('N', NULL, NULL, NULL, NULL, $1, 0.0, 0.0, NULL); }
-    | FLOAT_NUMBER                                { $$ = create_node('FL', NULL, NULL, NULL, NULL, 0, $1, 0.0, NULL);  }
-    | DOUBLE_NUMBER                               { $$ = create_node('DB', NULL, NULL, NULL, NULL, 0, 0.0, $1, NULL);  }
+    | INT_NUMBER                                  { $$ = create_node('INTN', NULL, NULL, NULL, NULL, $1, 0.0, 0.0, NULL); }
+    | FLOAT_NUMBER                                { $$ = create_node('FLN', NULL, NULL, NULL, NULL, 0, $1, 0.0, 'WTF');  }
+    | DOUBLE_NUMBER                               { $$ = create_node('DBN', NULL, NULL, NULL, NULL, 0, 0.0, $1, NULL);  }
     | LPAREN expr RPAREN                          { $$ = $2;                                                           }
     | IN LPAREN expr RPAREN                       { $$ = create_node('IN', $3, NULL, NULL, NULL, 0, 0.0, 0.0, NULL);   }
     | NORM expr                                   { $$ = create_node('/>', $2, NULL, NULL, NULL, 0, 0.0, 0.0, NULL);   }

@@ -18,17 +18,18 @@ ASTNode *create_node(int type, ASTNode *left, ASTNode *right, ASTNode *back, AST
     {
         node->value.sval = strdup(sval);
     }
-    else if (type == 'FL')
+    else if (type == 'FLN')
     {
         node->value.fval = fval;
     }
-    else if (type == 'DB')
+    else if (type == 'DBN')
     {
         node->value.dval = dval;
     }
     else
     {
         node->value.ival = ival;
+
     }
     return node;
 }
@@ -37,6 +38,7 @@ static int labelCount = 0; // Global static variable to maintain label count
 int acc_state = 0;
 int stk_state = 0;
 
+/*
 char *format_float(double value)
 {
     char buffer[50];
@@ -57,6 +59,7 @@ char *format_float(double value)
 
     return strdup(buffer);
 }
+*/
 
 void generate_code(ASTNode *node)
 {
@@ -76,18 +79,77 @@ void generate_code(ASTNode *node)
     case '+':
         if (node->left != NULL && node->left->type == '+')
         {
-            generate_code(node->left);                             // Recur on left subtree
-            fprintf(outfile, "PLD %s\n", node->right->value.sval); // Load next value onto the stack
-            fprintf(outfile, "SADD\n");                            // Add the stack value to the accumulator
+            generate_code(node->left); // Recur on left subtree 
+            if (node->right->type == 'INTN')
+            {
+                fprintf(outfile, "PLD %d\n", node->right->value.ival); // Load next value onto the stack
+            }
+            else if(node->right->type == 'FLN' || node->right->type == 'DBN')
+            {
+                fprintf(outfile, "PLD %s\n", node->right->value.sval); // Load next value onto the stack
+            }
+            fprintf(outfile, "SADD\n"); // Add the stack value to the accumulator
         }
         else
         {
-            generate_code(node->left);                             // Handle the leftmost operand
-            fprintf(outfile, "ADD %s\n", node->right->value.sval); // Add the right operand
+            generate_code(node->left); // Handle the leftmost operand
+            if (node->right->type == 'INTN')
+            {
+                fprintf(outfile, "ADD %d\n", node->right->value.ival); // Load next value onto the stack
+            }
+            else if (node->right->type == 'FLN')
+            {
+                fprintf(outfile, "ADD %f\n", node->right->value.fval); // Load next value onto the stack
+            }
         }
         acc_state = 1;
 
         break;
+    case '-':
+    {
+        // Check if the left operand is also a subtraction operation (e.g., a - b - c)
+        if (node->left != NULL && node->left->type == '-')
+        {
+            // Recursively handle the left subtree (this ensures correct ordering of operations)
+            generate_code(node->left);
+            // Load and negate the right operand
+            if (node->right->type == 'INTN')
+            {
+                fprintf(outfile, "PLD %d\n", node->right->value.ival); // Load next value onto the stack
+            }
+            else if (node->right->type == 'I' || node->right->type == 'FLN')
+            {
+                fprintf(outfile, "PLD %s\n", node->right->value.sval); // Load next value onto the stack
+            }
+            fprintf(outfile, "NEG\n");
+            // Add the negated value to the accumulator (which holds the result of the left subtree)
+            fprintf(outfile, "SADD\n");
+        }
+        else
+        {
+            // Handle the first subtraction operation (e.g., a - b)
+            if (node->right->type == 'INTN')
+            {
+                fprintf(outfile, "LOAD %d\n", node->right->value.ival); // Load next value onto the stack
+            }
+            else if (node->right->type == 'I' || node->right->type == 'FLN')
+            {
+                fprintf(outfile, "LOAD %s\n", node->right->value.sval); // Load next value onto the stack
+            }
+            fprintf(outfile, "NEG\n"); // Negate the right operand
+            if (node->left->type == 'INTN')
+            {
+                fprintf(outfile, "ADD %d\n", node->left->value.ival); // Load next value onto the stack
+            }
+            else if (node->left->type == 'I' || node->left->type == 'FLN')
+            {
+                fprintf(outfile, "ADD %s\n", node->left->value.sval); // Load next value onto the stack
+            }
+        }
+        acc_state = 1; // Update the accumulator state
+        break;
+    }
+
     case '++':
     {
         // Handle increment operation
@@ -106,11 +168,6 @@ void generate_code(ASTNode *node)
         fprintf(outfile, "SET %s\n", node->value.sval);
         break;
     }
-    case '-':
-        generate_code(node->left);
-        generate_code(node->right);
-        fprintf(outfile, "SUB R0, R1\n");
-        break;
     case '*':
 
         if (node->left != NULL && node->left->type == '*')
@@ -128,9 +185,20 @@ void generate_code(ASTNode *node)
 
         break;
     case '/':
-        generate_code(node->left);
-        generate_code(node->right);
-        fprintf(outfile, "DIV R0, R1\n");
+
+        if (node->left != NULL && node->left->type == '/')
+        {
+            generate_code(node->left);                             // Recur on left subtree
+            fprintf(outfile, "PLD %s\n", node->right->value.sval); // Load next value onto the stack
+            fprintf(outfile, "SDIV\n");                            // Add the stack value to the accumulator
+        }
+        else
+        {
+            generate_code(node->left);                             // Handle the leftmost operand
+            fprintf(outfile, "DIV %s\n", node->right->value.sval); // Add the right operand
+        }
+        acc_state = 1;
+
         break;
     case '%':
         generate_code(node->left);
@@ -138,14 +206,24 @@ void generate_code(ASTNode *node)
         fprintf(outfile, "MOD\n");
         break;
     case '<':
-        generate_code(node->left);
+        // generate_code(node->left);
         generate_code(node->right);
-        fprintf(outfile, "LT R0, R1\n");
+        fprintf(outfile, "LES %s\n", node->left->value.sval);
         break;
     case '>':
         generate_code(node->left);
         generate_code(node->right);
-        fprintf(outfile, "GT R0, R1\n");
+        fprintf(outfile, "GT\n");
+        break;
+    case '>=':
+        generate_code(node->left);
+        generate_code(node->right);
+        fprintf(outfile, "GE\n");
+        break;
+    case '<=':
+        generate_code(node->left);
+        generate_code(node->right);
+        fprintf(outfile, "LE\n");
         break;
     case '=':
         generate_code(node->right);
@@ -229,37 +307,63 @@ void generate_code(ASTNode *node)
     case 'P':
         fprintf(outfile, "PUSH %s\n", node->value.sval);
         break;
-    case 'I':
-        if (acc_state == 1)
+    case 'I': // Identifier
+    {
+        // Only load the variable if the accumulator is empty (acc_state == 0)
+        if (acc_state == 0)
         {
-            fprintf(outfile, "PLD %s\n", node->value.sval);
-            stk_state = 1;
-            acc_state = 0;
+            fprintf(outfile, "LOAD %s\n", node->value.sval);
+            acc_state = 1; // Set the accumulator state to indicate it's in use
         }
         else
         {
-            fprintf(outfile, "LOAD %s\n", node->value.sval);
-            acc_state = 1;
+            // If the accumulator is already in use, push the variable onto the stack instead
+            fprintf(outfile, "PLD %s\n", node->value.sval);
         }
-
-        break;
-    case 'N':
-        fprintf(outfile, "LOAD %d\n", node->value.ival);
-        break;
-    case 'FL':
-    {
-        // Handle floating-point number formatting
-        char *formatted = format_float(node->value.fval);
-        fprintf(outfile, "LOAD %s\n", formatted);
-        free(formatted);
         break;
     }
-    case 'DB':
+    case 'INTN':
+    {
+        // Only load the variable if the accumulator is empty (acc_state == 0)
+        if (acc_state == 0)
+        {
+            fprintf(outfile, "LOAD %d\n", node->value.ival);
+            acc_state = 1; // Set the accumulator state to indicate it's in use
+        }
+        else
+        {
+            // If the accumulator is already in use, push the variable onto the stack instead
+            fprintf(outfile, "PLD %d\n", node->value.ival);
+        }
+        break;
+    }
+    case 'FLN':
+    {
+
+        fprintf(outfile, "%s\n", node->value.sval);
+
+        // Handle floating-point number formatting
+        //char *formatted = format_float(node->value.fval);
+        // Only load the variable if the accumulator is empty (acc_state == 0)
+        if (acc_state == 0)
+        {
+            fprintf(outfile, "LOAD %f\n", node->value.fval);
+            acc_state = 1; // Set the accumulator state to indicate it's in use
+        }
+        else
+        {
+            // If the accumulator is already in use, push the variable onto the stack instead
+            fprintf(outfile, "PLD %f\n", node->value.fval);
+        }
+        //free(formatted);
+        break;
+    }
+    case 'DBN':
     {
         // Handle double-precision number formatting
-        char *formatted = format_float(node->value.dval);
-        fprintf(outfile, "LOAD %s\n", formatted);
-        free(formatted);
+        //char *formatted = format_float(node->value.dval);
+        //fprintf(outfile, "LOAD %s\n", formatted);
+        //free(formatted);
         break;
     }
     case 'R':
@@ -307,19 +411,18 @@ void generate_code(ASTNode *node)
     }
     case 'W':
     { // While loop
-        int startLabel = labelCount++;
+        int startLabel = 1 + labelCount++;
         int endLabel = labelCount++;
 
-        fprintf(outfile, "L%d:\n", startLabel);
+        fprintf(outfile, "@L%d ", startLabel);
 
         generate_code(node->left); // Condition
-        fprintf(outfile, "CMP R0, 0\n");
-        fprintf(outfile, "JE L%d\n", endLabel);
+        fprintf(outfile, "JZ L%dend\n", endLabel);
 
         generate_code(node->right); // Body
 
         fprintf(outfile, "JMP L%d\n", startLabel);
-        fprintf(outfile, "L%d:\n", endLabel);
+        fprintf(outfile, "@L%dend\n", endLabel);
         break;
     }
     case 'F':

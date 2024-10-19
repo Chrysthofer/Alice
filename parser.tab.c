@@ -160,7 +160,7 @@ void generate_code_from_ast(ASTNode *node);
      IN = 294,
      OUT = 295,
      IDENTIFIER = 296,
-     NUMBER = 297,
+     INT_NUMBER = 297,
      FLOAT_NUMBER = 298,
      DOUBLE_NUMBER = 299
    };
@@ -528,7 +528,7 @@ static const char *const yytname[] =
   "FOR", "PLUS", "MINUS", "TIMES", "DIVIDE", "MODULUS", "ASSIGN", "EQUAL",
   "DIF", "SEMICOLON", "PLUSPLUS", "MINUSMINUS", "LPAREN", "RPAREN",
   "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "LT", "GT", "LE",
-  "GE", "IN", "OUT", "IDENTIFIER", "NUMBER", "FLOAT_NUMBER",
+  "GE", "IN", "OUT", "IDENTIFIER", "INT_NUMBER", "FLOAT_NUMBER",
   "DOUBLE_NUMBER", "'+'", "$accept", "program", "decls", "decl",
   "boolean_literal", "stmt", "stmt_list", "expr", 0
 };
@@ -1875,14 +1875,14 @@ yyreduce:
 
 /* Line 1464 of yacc.c  */
 #line 140 "parser.y"
-    { (yyval.node) = create_node(LE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL, NULL, 0, 0.0, 0.0, NULL);       ;}
+    { (yyval.node) = create_node('<=', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL, NULL, 0, 0.0, 0.0, NULL);       ;}
     break;
 
   case 40:
 
 /* Line 1464 of yacc.c  */
 #line 141 "parser.y"
-    { (yyval.node) = create_node(GE, (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL, NULL, 0, 0.0, 0.0, NULL);       ;}
+    { (yyval.node) = create_node('>=', (yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node), NULL, NULL, 0, 0.0, 0.0, NULL);       ;}
     break;
 
   case 41:
@@ -1945,21 +1945,21 @@ yyreduce:
 
 /* Line 1464 of yacc.c  */
 #line 151 "parser.y"
-    { (yyval.node) = create_node('N', NULL, NULL, NULL, NULL, (yyvsp[(1) - (1)].ival), 0.0, 0.0, NULL); ;}
+    { (yyval.node) = create_node('INTN', NULL, NULL, NULL, NULL, (yyvsp[(1) - (1)].ival), 0.0, 0.0, NULL); ;}
     break;
 
   case 51:
 
 /* Line 1464 of yacc.c  */
 #line 152 "parser.y"
-    { (yyval.node) = create_node('FL', NULL, NULL, NULL, NULL, 0, (yyvsp[(1) - (1)].fval), 0.0, NULL);  ;}
+    { (yyval.node) = create_node('FLN', NULL, NULL, NULL, NULL, 0, (yyvsp[(1) - (1)].fval), 0.0, 'WTF');  ;}
     break;
 
   case 52:
 
 /* Line 1464 of yacc.c  */
 #line 153 "parser.y"
-    { (yyval.node) = create_node('DB', NULL, NULL, NULL, NULL, 0, 0.0, (yyvsp[(1) - (1)].dval), NULL);  ;}
+    { (yyval.node) = create_node('DBN', NULL, NULL, NULL, NULL, 0, 0.0, (yyvsp[(1) - (1)].dval), NULL);  ;}
     break;
 
   case 53:
