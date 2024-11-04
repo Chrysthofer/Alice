@@ -33,7 +33,7 @@
             "label": "Run",
             "type": "process",
             "command": "cmd.exe",
-            "args": ["/c", ".\\mycompiler.exe < test.c"],
+            "args": ["/c", ".\\mycompiler.exe < test.cmm"],
             "problemMatcher": []
         },
         {
