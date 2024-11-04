@@ -66,26 +66,30 @@ scientific_number [0-9]+(\.[0-9]*)?[eE][+-]?[0-9]+
 "--"        { return MINUSMINUS; }
 
 {identifier} {
+    printf("Recognized id: %s\n", yytext);  // Debugging output
     yylval.sval = strdup(yytext);
     return IDENTIFIER;
 }
 
 {double_number} {
+    printf("Recognized double: %s\n", yytext);  // Debugging output
     yylval.dval = atof(yytext);
     return DOUBLE_NUMBER;
 }
 
 {float_number} {
+    printf("Recognized float: %s\n", yytext);  // Debugging output
     yylval.fval = atof(yytext);
     return FLOAT_NUMBER;
 }
 
 {scientific_number} {
     yylval.fval = atof(yytext);
-    return SCIENTIFIC_NUMBER;
+    return FLOAT_NUMBER;
 }
 
 {int_number}    {
+    printf("Recognized int: %s\n", yytext);  // Debugging output
     yylval.ival = atoi(yytext);
     return INT_NUMBER;
 }

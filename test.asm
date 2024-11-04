@@ -1,0 +1,5 @@
+LOAD b
+PLD g
+DIV e
+SET a
+ROOT

@@ -46,7 +46,6 @@ void generate_code_from_ast(ASTNode *node);
 %left EQUAL
 %left LT GT LE GE
 %left PLUS MINUS
-%left '+'
 %left TIMES DIVIDE
 
 %%
@@ -149,7 +148,7 @@ expr:
     | boolean_literal                                                                                                   
     | IDENTIFIER                                  { $$ = create_node('I', NULL, NULL, NULL, NULL, 0, 0.0, 0.0, $1);    }
     | INT_NUMBER                                  { $$ = create_node('INTN', NULL, NULL, NULL, NULL, $1, 0.0, 0.0, NULL); }
-    | FLOAT_NUMBER                                { $$ = create_node('FLN', NULL, NULL, NULL, NULL, 0, $1, 0.0, 'WTF');  }
+    | FLOAT_NUMBER                                { $$ = create_node('FLN', NULL, NULL, NULL, NULL, 0, $1, 0.0, NULL);  }
     | DOUBLE_NUMBER                               { $$ = create_node('DBN', NULL, NULL, NULL, NULL, 0, 0.0, $1, NULL);  }
     | LPAREN expr RPAREN                          { $$ = $2;                                                           }
     | IN LPAREN expr RPAREN                       { $$ = create_node('IN', $3, NULL, NULL, NULL, 0, 0.0, 0.0, NULL);   }

@@ -1064,38 +1064,42 @@ case 44:
 YY_RULE_SETUP
 #line 68 "lexer.l"
 {
+    printf("Recognized id: %s\n", yytext);  // Debugging output
     yylval.sval = strdup(yytext);
     return IDENTIFIER;
 }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 73 "lexer.l"
+#line 74 "lexer.l"
 {
+    printf("Recognized double: %s\n", yytext);  // Debugging output
     yylval.dval = atof(yytext);
     return DOUBLE_NUMBER;
 }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 78 "lexer.l"
+#line 80 "lexer.l"
 {
+    printf("Recognized float: %s\n", yytext);  // Debugging output
     yylval.fval = atof(yytext);
     return FLOAT_NUMBER;
 }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 83 "lexer.l"
+#line 86 "lexer.l"
 {
     yylval.fval = atof(yytext);
-    return SCIENTIFIC_NUMBER;
+    return FLOAT_NUMBER;
 }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 88 "lexer.l"
+#line 91 "lexer.l"
 {
+    printf("Recognized int: %s\n", yytext);  // Debugging output
     yylval.ival = atoi(yytext);
     return INT_NUMBER;
 }
@@ -1103,24 +1107,24 @@ YY_RULE_SETUP
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 93 "lexer.l"
+#line 97 "lexer.l"
 { /* skip whitespace */ }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 95 "lexer.l"
+#line 99 "lexer.l"
 { return yytext[0]; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 96 "lexer.l"
+#line 100 "lexer.l"
 { return 0; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 98 "lexer.l"
+#line 102 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1124 "lex.yy.c"
+#line 1128 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2116,7 +2120,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 98 "lexer.l"
+#line 102 "lexer.l"
 
 
 
